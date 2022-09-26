@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "tsc && cd dist && node index.js"
+    "build": "tsc && cd dist && node index.js",
+    "start:debug": "nodemon --inspect-brk=5858 ./src/index.ts"
   },
   "dependencies": {
     "@types/express": "^4.17.14",

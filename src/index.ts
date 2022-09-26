@@ -28,21 +28,33 @@ APP.get("/", (req, res) => {
 });
 
 let CLIENT_IS_READY = false
+let FIRST = true
 
 IO.on("connection", (socket) => {
-    console.clear()
     //check if the connection is comming from client or dashboard
     if(socket.handshake.headers.client_type=='2')//connection coming from dashboard
     {
         if(CLIENT_IS_READY==false)  //Client is Not yet available 
         {
-            socket.emit('not_ready')    //emit not_ready_forcing_dashboard to not respond
+            socket.emit('cli_not_ready')    //emit not_ready_forcing_dashboard to not respond
         }else{
-            console.log(chalk.bgCyanBright("Dashboard Connected"))
+            setTimeout(()=>{
+                console.clear()
+                console.log(chalk.bgCyanBright("Dashboard Connected"))
+            },2000)
+            socket.emit('operational')
         }
     }else{
         CLIENT_IS_READY=true;
+        console.clear()
         console.log(chalk.bgMagenta("Connection to Client Established"));
+        if(FIRST==true){
+
+            childprocess.exec(start + ' ' + `http://localhost:${PORT}`); 
+            FIRST=false
+        }
+        IO.sockets.emit('operational')
+        // IO.socket.emit('operational')
     }
     // if(CLIENT_IS_READY==false){
     //     if(socket.handshake.auth.token=="dashboard"){
@@ -64,13 +76,15 @@ IO.on("connection", (socket) => {
 //   }
 //   childprocess.exec(start + ' ' + `http://localhost:${PORT}`); 
   socket.on("disconnect", () => {
- 
     if(socket.handshake.headers.client_type=='1'){
-        //client disconnected
-        console.log("client disconnected")
+        IO.sockets.emit('cli_disconnected')
+        console.clear()
+        console.log(chalk.bgRedBright("client disconnected"))
+        console.log(chalk.red(`Waiting for Client to Reconnect`));
         CLIENT_IS_READY=false;
-        socket.emit('client_disconnect') 
-        //force dashboard to switch off
+    }else{
+        console.clear();
+        console.log(chalk.bgRedBright("Dashboard Disconnected"))
     }
     // if(socket.handshake.auth.token=="dashboard"){
     //     console.clear();
@@ -88,7 +102,7 @@ IO.on("connection", (socket) => {
 
 SERVER.listen(PORT, () => {
   console.clear();
-  console.log(chalk.red(`Waiting for Client to Connect to ${PORT}`));
+  console.log(chalk.red(`Waiting for Client to Connect to PORT ${PORT}`));
 });
 
 console.clear();
