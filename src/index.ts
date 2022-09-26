@@ -50,7 +50,7 @@ IO.on("connection", (socket) => {
         console.log(chalk.bgMagenta("Connection to Client Established"));
         if(FIRST==true){
 
-            childprocess.exec(start + ' ' + `http://localhost:${PORT}`); 
+            // childprocess.exec(start + ' ' + `http://localhost:${PORT}`); 
             FIRST=false
         }
         IO.sockets.emit('operational')
@@ -100,10 +100,11 @@ IO.on("connection", (socket) => {
   })
 });
 
-SERVER.listen(PORT, () => {
-  console.clear();
-  console.log(chalk.red(`Waiting for Client to Connect to PORT ${PORT}`));
-});
+// SERVER.listen(PORT, () => {
+//   console.clear();
+//   console.log(chalk.red(`Waiting for Client to Connect to PORT ${PORT}`));
+// });
+//ENABLE THIS
 
 console.clear();
 
@@ -113,3 +114,60 @@ console.clear();
 // let start = (process.platform == 'darwin'? 'open': process.platform == 'win32'? 'start': 'xdg-open');
 
 // childprocess.exec(start + ' ' + url);
+
+
+import {data} from './json'
+// console.log(data.records[1].tdata.split(','))
+
+
+
+// console.clear()
+// console.log("Name:-           ",data.records[1].tdata.split(',')[0])
+// console.log("Latitude:-       ",data.records[1].tdata.split(',')[1])
+// console.log("Longitude:-      ",data.records[1].tdata.split(',')[2])
+// console.log("cell_1_v:-       ",data.records[1].tdata.split(',')[3]," mV")
+// console.log("cell_2_v:-       ",data.records[1].tdata.split(',')[4]," mV")
+// console.log("cell_3_v:-       ",data.records[1].tdata.split(',')[5]," mV")
+// console.log("cell_4_v:-       ",data.records[1].tdata.split(',')[6]," mV")
+// console.log("cell_5_v:-       ",data.records[1].tdata.split(',')[7]," mV")
+// console.log("cell_6_v:-       ",data.records[1].tdata.split(',')[8]," mV")
+// console.log("cell_7_v:-       ",data.records[1].tdata.split(',')[9]," mV")
+// console.log("cell_8_v:-       ",data.records[1].tdata.split(',')[10]," mV")
+// console.log("cell_9_v:-       ",data.records[1].tdata.split(',')[11]," mV")
+// console.log("cell_10_v:-      ",data.records[1].tdata.split(',')[12]," mV")
+// console.log("cell_11_v:-      ",data.records[1].tdata.split(',')[13]," mV")
+// console.log("cell_12_v:-      ",data.records[1].tdata.split(',')[14]," mV")
+// console.log("cell_13_v:-      ",data.records[1].tdata.split(',')[15]," mV")
+// console.log("cell_14_v:-      ",data.records[1].tdata.split(',')[16]," mV")
+// console.log("avg_cell_v:-     ",data.records[1].tdata.split(',')[17]," mV")
+// console.log("pack_voltage:-   ",data.records[1].tdata.split(',')[18]," mV")
+// console.log("current:-        ",data.records[1].tdata.split(',')[19]," mAmp")
+// console.log("battery_percent:-",data.records[1].tdata.split(',')[20]," %")
+
+
+data.records.map((e)=>{
+  console.log(e.vid)
+  console.log(e.datavia)
+  console.log(e.created)
+  console.log(e.tdata.split(',')[0])
+  console.log(e.tdata.split(',')[1])
+  console.log(e.tdata.split(',')[2])
+  console.log(e.tdata.split(',')[3])
+  console.log(e.tdata.split(',')[4])
+  console.log(e.tdata.split(',')[5])
+  console.log(e.tdata.split(',')[6])
+  console.log(e.tdata.split(',')[7])
+  console.log(e.tdata.split(',')[8])
+  console.log(e.tdata.split(',')[9])
+  console.log(e.tdata.split(',')[10])
+  console.log(e.tdata.split(',')[11])
+  console.log(e.tdata.split(',')[12])
+  console.log(e.tdata.split(',')[13])
+  console.log(e.tdata.split(',')[14])
+  console.log(e.tdata.split(',')[15])
+  console.log(e.tdata.split(',')[16])
+  console.log(e.tdata.split(',')[17])
+  console.log(e.tdata.split(',')[18])
+  console.log(e.tdata.split(',')[19])
+  console.log(e.tdata.split(',')[20])
+})
