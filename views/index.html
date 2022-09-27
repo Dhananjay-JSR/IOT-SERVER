@@ -23,11 +23,15 @@ extraHeaders: {
     "client_type":'2'
 }})
 
+let Current_Status = true
+
 DASHBOARD.on('cli_not_ready', ()=>{
     document.getElementById('client_status').style.color='red'
     document.getElementById('client_status').innerText="Client Not Yet Connected"
     document.getElementById('server_status').style.color='green'
     document.getElementById('server_status').innerText="Operational"
+    document.getElementById('power_status').innerText='Client Disconnected'
+    document.getElementById('power_status').disabled=true
 })
 
 DASHBOARD.on('operational', ()=>{
@@ -35,11 +39,19 @@ DASHBOARD.on('operational', ()=>{
     document.getElementById('client_status').innerText="Operational"
     document.getElementById('server_status').style.color='green'
     document.getElementById('server_status').innerText="Operational"
+    document.getElementById('power_status').innerText='Currently:- (ON)'
+    document.getElementById('power_status').disabled=false
+    document.getElementById('power_status').style.color='brown '
 })
 
 DASHBOARD.on("cli_disconnected",()=>{
     document.getElementById('client_status').style.color='red'
     document.getElementById('client_status').innerText="Client Disconnected"
+    document.getElementById('power_status').innerText='Client Disconnected'
+    document.getElementById('power_status').disabled=true
+    document.getElementById('power_status').innerText='Client Disconnected'
+    document.getElementById('power_status').style.color='red'
+    document.getElementById('power_status').disabled=true
 })
 
 DASHBOARD.on("disconnect", (reason) => {
@@ -47,14 +59,48 @@ DASHBOARD.on("disconnect", (reason) => {
     document.getElementById('server_status').innerText="Server Disconnected"
     document.getElementById('client_status').style.color='red'
     document.getElementById('client_status').innerText="Client Disconnected"
+    document.getElementById('db_status').style.color='red'
+    document.getElementById('db_status').innerText="DB Disconnected"
+    document.getElementById('power_status').innerText='Client Disconnected'
+    document.getElementById('power_status').disabled=true
 });
 
+DASHBOARD.on("mysql_online", (reason) => {
+    document.getElementById('db_status').style.color='green'
+    document.getElementById('db_status').innerText="Operational"
+});
+
+function test(){
+  if(Current_Status==true){
+        DASHBOARD.emit('power_off')
+        Current_Status = false
+        document.getElementById('power_status').innerText='Currently:- (OFF)'
+        document.getElementById('power_status').style.color='red'
+    }
+    else{
+        DASHBOARD.emit('power_on')
+        Current_Status = true
+        document.getElementById('power_status').innerText='Currently:- (ON)'
+        document.getElementById('power_status').style.color='brown'
+    }
+}
+
+
+
     </script>
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a id="dashboard-Text" class="navbar-brand">Dashboard</a>
+    <nav class="navbar navbar-dark bg-dark " style="height: 100px;">
+        <div class="container-fluid" style="justify-content: space-around">
+            <a id="dashboard-Text " class="navbar-brand">Dashboard</a>
+            <button style="width: 250px;
+            border-radius: 25px;
+            border-color: aqua;" id="btn" onclick="test()">Toggle Client <div id="power_status" style="display: inline-block">UNKNOWN</div></button>
+          </div>
+          <div class="container-fluid">
             <span class="navbar-text">
                 IOT Client Status <div class="inline" id="client_status">UNAVAILABLE</div>
+              </span>
+              <span class="navbar-text">
+                Database Status <div class="inline" id="db_status">NO SIGNAL</div>
               </span>
               <span class="navbar-text">
                 Server Status <div class="inline" id="server_status">UNAVAILABLE</div>
